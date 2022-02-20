@@ -16,7 +16,7 @@ export const WaitingRoom = ({socket}) => {
     })
 
     socket.on('start_match', () => {
-      navigate('/play', { state: { playerOne: nickname, playerTwo: opponent}})
+      navigate('/play', { state: { room: roomNumber, playerOne: nickname, playerTwo: opponent, symbol: 'X'}})
     })
 
   },[socket, navigate, nickname, roomNumber, opponent])

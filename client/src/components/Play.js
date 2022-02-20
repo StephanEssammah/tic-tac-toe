@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import '../styles/Play.scss'
 import { BoardSquare } from './subcomponents/BoardSquare'
 
-export const Play = () => {
-  const {playerOne, playerTwo} = useLocation().state
-  const board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+export const Play = ({socket}) => {
+  const [myTurn, setMyTurn] = useState(false)
+  const [status, setStatus] = useState('Opponents turn')
+  const {playerOne, playerTwo, symbol, room} = useLocation().state
+  const [board, setBoard] = useState(['', 'X', '', '', '', 'O', '', '', ''])
+
+  useEffect(() => {
+    if(symbol === 'X') {
+      setMyTurn(true)
+      setStatus('Your Turn!')
+      return;
+    }
+  }, [symbol])
+
+  useEffect(() => {
+    myTurn ? setStatus('Your Turn!') : setStatus('Opponents turn')
+  }, [myTurn])
+
+  useEffect(() => {
+    socket.on('board_changed', (board) => {
+      setBoard(board)
+    })
+    socket.on('your_turn', () => {
+      setMyTurn(true)
+    })
+  }, [socket])
 
   return (
     <div className="play">
@@ -22,9 +45,21 @@ export const Play = () => {
           <p className="play__scoreboard__symbol">O</p>
         </div>
       </header>
-      <h1 className="white-text">Status Message</h1>
+      <h1 className="white-text">{status}</h1>
       <div className="play__board">
-        {board.map((square, index) => <BoardSquare key={index} />)}
+        {board.map((square, index) => (
+          <BoardSquare 
+            room={room}
+            socket={socket}
+            board={board} 
+            symbol={symbol} 
+            square={square} 
+            myTurn={myTurn} 
+            setMyTurn={setMyTurn}
+            index={index} 
+            key={index} 
+          />
+        ))}
       </div>
       <div />
     </div>

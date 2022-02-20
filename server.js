@@ -34,6 +34,11 @@ io.on("connection", (socket) => {
     io.to(room).emit('start_match')
   })
 
+  socket.on('board_change', (room, array) => {
+    io.to(room).emit('board_changed', array)
+    socket.to(room).emit('your_turn')
+  })
+
 })
 
 

@@ -23,9 +23,9 @@ export const JoinMatch = ({socket}) => {
     socket.on('opponent_name', (name) => setOpponent(name))
     
     socket.on('start_match', () => {
-      navigate('/play', { state: { playerOne: opponent, playerTwo: nickname}})
+      navigate('/play', { state: { room: Number(roomNumber), playerOne: opponent, playerTwo: nickname, symbol: 'O'}})
     })
-  },[socket, navigate, nickname, opponent])
+  },[socket, navigate, nickname, opponent, roomNumber])
 
   return (
     <div className="container">
