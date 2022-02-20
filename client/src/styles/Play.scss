@@ -1,0 +1,60 @@
+.play {
+  padding: 1em;
+  height: 100vh;
+  background: linear-gradient(#EE0979, #FF6A00);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+
+  &__scoreboard {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    filter: var(--drop-shadow);
+
+    &__score {
+      font-size: 1.5em;
+      font-weight: 500;
+    }
+
+    &__symbol {
+      font-size: 3em;
+      font-weight: 600;
+      line-height: 1em;
+    }
+  }
+
+  &__board {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #2D2D2D;
+    // border-radius: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+
+    &__square {
+      outline: 1px solid #1B1B1B;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &__clickable {
+        outline: 1px solid #1B1B1B;
+        cursor: pointer;
+        &:hover {
+          background-color: #414141;
+        }
+      }
+
+      &__symbol {
+        color: white;
+        font-size: 5em;
+      }
+    }
+  }
+}
