@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 
-export const CreateMatch = () => {
+export const CreateMatch = ({socket}) => {
   const [nickname, setNickname] = useState('')
   const navigate = useNavigate()
 
   const submit = () => {
     if (nickname === '') return;
-    // create socket room
+    socket.emit('create_room')
     navigate('/waiting-room')
   }
 
