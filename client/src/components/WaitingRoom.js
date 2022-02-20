@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export const WaitingRoom = ({socket}) => {
   const [roomNumber, setRoomNumber] = useState('')
+  const [opponent, setOpponent] = useState('')
+  const nickname = useLocation().state
   const navigate = useNavigate()
 
   useEffect(() => {
-    socket.on('room_created', (room) => {
-      setRoomNumber(room)
+    socket.on('room_created', (room) => setRoomNumber(room))
+
+    socket.on('opponent_joined', (opponentName) => {
+      setOpponent(opponentName)
+      socket.emit('send_name', roomNumber, nickname)
     })
 
     socket.on('start_match', () => {
-      navigate('/play')
+      navigate('/play', { state: { playerOne: nickname, playerTwo: opponent}})
     })
-  },[socket, navigate])
+
+  },[socket, navigate, nickname, roomNumber, opponent])
 
   return (
     <div className="container white-text" >

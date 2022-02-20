@@ -22,12 +22,18 @@ io.on("connection", (socket) => {
     socket.emit('room_created', roomNumber)
   })
 
-  socket.on("join_room", (room) => {
+  socket.on("join_room", (room, name) => {
     if (players(io, room) === 2) return socket.emit('room_full')
     if (players(io, room) === 'not found') return socket.emit('room_not_found')
     socket.join(room)
+    socket.to(room).emit('opponent_joined', name)
+  })
+
+  socket.on("send_name", (room, name) => {
+    socket.to(room).emit('opponent_name', name)
     io.to(room).emit('start_match')
   })
+
 })
 
 
