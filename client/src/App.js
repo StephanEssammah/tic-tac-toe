@@ -1,22 +1,21 @@
 import './App.scss';
+import './temporary-styling.scss'
+import { Routes, Route } from 'react-router-dom'
+import { Menu } from './components/Menu';
+import { CreateMatch } from './components/CreateMatch';
+import { WaitingRoom } from './components/WaitingRoom';
+import { Play } from './components/Play';
+import { JoinMatch } from './components/JoinMatch';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path='/' element={<Menu />} />
+      <Route path='/create-match' element={<CreateMatch />} />
+      <Route path='/join-match' element={<JoinMatch />} />
+      <Route path='/waiting-room' element={<WaitingRoom />} />
+      <Route path='/play' element={<Play/>} />
+    </Routes>
   );
 }
 
