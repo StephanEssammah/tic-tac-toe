@@ -33,7 +33,11 @@ export const JoinMatch = ({socket}) => {
       {roomNotFound && <p className="white-text">Room not found.</p>}
       <input className="input" placeholder="Nickname" value={nickname} onChange={e => setNickname(e.target.value)} />
       <input className="input" placeholder="Room number" value={roomNumber} onChange={e => setRoomNumber(e.target.value)} />
-      <button className="btn" onClick={submit}>Continue</button>
+      <button className={
+        nickname === '' || roomNumber === ''
+        ? 'btn btn-inactive'
+        : 'btn'
+      } onClick={submit}>Continue</button>
     </div>
   )
 }

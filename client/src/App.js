@@ -8,7 +8,6 @@ import { Play } from './components/Play';
 import { JoinMatch } from './components/JoinMatch';
 
 import './App.scss';
-import './temporary-styling.scss'
 
 function App() {
   const URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001/'
