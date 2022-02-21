@@ -9,7 +9,8 @@ export const CreateMatch = ({socket}) => {
   const submit = () => {
     if (nickname === '') return;
     socket.emit('create_room')
-    navigate('/waiting-room')
+    navigate('/waiting-room', { state: nickname})
+    // navigate('/play')
   }
 
   return (

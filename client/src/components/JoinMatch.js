@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const JoinMatch = ({socket}) => {
   const [nickname, setNickname] = useState('')
+  const [opponent, setOpponent] = useState('')
   const [roomNumber, setRoomNumber] = useState('')
   const [roomFull, setRoomFull] = useState(false)
   const [roomNotFound, setRoomNotFound] = useState(false)
@@ -13,22 +14,18 @@ export const JoinMatch = ({socket}) => {
     if(roomFull) setRoomFull(false)
     if(roomNotFound) setRoomNotFound(false)
     if (nickname === '' || roomNumber === '') return;
-    socket.emit('join_room', Number(roomNumber))
+    socket.emit('join_room', Number(roomNumber), nickname)
   }
 
   useEffect(() => {
+    socket.on('room_full', () => setRoomFull(true))
+    socket.on('room_not_found', () => setRoomNotFound(true))
+    socket.on('opponent_name', (name) => setOpponent(name))
+    
     socket.on('start_match', () => {
-      navigate('/play')
+      navigate('/play', { state: { room: Number(roomNumber), playerOne: opponent, playerTwo: nickname, symbol: 'O'}})
     })
-
-    socket.on('room_full', () => {
-      setRoomFull(true)
-    })
-
-    socket.on('room_not_found', () => {
-      setRoomNotFound(true)
-    })
-  },[socket, navigate])
+  },[socket, navigate, nickname, opponent, roomNumber])
 
   return (
     <div className="container">

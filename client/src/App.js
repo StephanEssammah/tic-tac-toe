@@ -20,7 +20,7 @@ function App() {
       <Route path='/create-match' element={<CreateMatch socket={socket} />} />
       <Route path='/join-match' element={<JoinMatch socket={socket} />} />
       <Route path='/waiting-room' element={<WaitingRoom socket={socket}/>} />
-      <Route path='/play' element={<Play/>} />
+      <Route path='/play' element={<Play socket={socket} />} />
     </Routes>
   );
 }

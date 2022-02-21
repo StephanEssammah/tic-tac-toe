@@ -1,0 +1,20 @@
+.menu {
+  &__logo {
+    color: white;
+    font-size: 7em;
+    font-weight: 800;
+    margin: 0;
+    padding: 0;
+    line-height: 0.75em;
+    filter: var(--drop-shadow);
+
+    &-subheading {
+      color: white;
+      font-size: 3em;
+      font-weight: 700;
+      margin-bottom: 3em;
+      filter: var(--drop-shadow);
+    }
+  }
+
+}

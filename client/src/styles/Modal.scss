@@ -1,0 +1,29 @@
+.modal {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(black, 0.75);
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  text-align: center;
+
+  &__container {
+    color: white;
+    padding: 3em 1em;
+    background: linear-gradient(#FF6A00, #EE0979);
+    width: 100%;
+    border-radius: 40px;
+  }
+
+  &__paragraph {
+    filter: var(--drop-shadow);
+  }
+
+  &__game-status {
+    margin-bottom: 1em;
+    filter: var(--drop-shadow);
+  }
+}

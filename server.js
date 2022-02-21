@@ -2,7 +2,7 @@ import express from "express"
 import { Server } from "socket.io"
 import http from "http"
 import path from "path"
-import { players } from './utils.js'
+import { players, checkForWin } from './utils.js'
 
 const port = process.env.PORT || 3001;
 const app = express()
@@ -22,12 +22,33 @@ io.on("connection", (socket) => {
     socket.emit('room_created', roomNumber)
   })
 
-  socket.on("join_room", (room) => {
+  socket.on("join_room", (room, name) => {
     if (players(io, room) === 2) return socket.emit('room_full')
     if (players(io, room) === 'not found') return socket.emit('room_not_found')
     socket.join(room)
+    socket.to(room).emit('opponent_joined', name)
+  })
+
+  socket.on("send_name", (room, name) => {
+    socket.to(room).emit('opponent_name', name)
     io.to(room).emit('start_match')
   })
+
+  socket.on('board_change', (room, array, symbol) => {
+    io.to(room).emit('board_changed', array)
+    const win = checkForWin(array, symbol)
+    if (win) {
+      socket.emit('win')
+      socket.to(room).emit('loss')
+      return;
+    }
+    socket.to(room).emit('your_turn')
+  })
+
+  socket.on('player_ready', (room) => {
+    socket.to(room).emit('other_player_ready')
+  })
+
 })
 
 
