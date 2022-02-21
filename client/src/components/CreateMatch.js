@@ -10,13 +10,19 @@ export const CreateMatch = ({socket}) => {
     if (nickname === '') return;
     socket.emit('create_room')
     navigate('/waiting-room', { state: nickname})
-    // navigate('/play')
   }
+
+
 
   return (
     <div className="container">
-      <input className="input" placeholder="Nickname" value={nickname} onChange={e => setNickname(e.target.value)} />
-      <button className="btn" onClick={submit}>Continue</button>
+      <input 
+        className="input" 
+        placeholder="Nickname" 
+        value={nickname} 
+        onChange={e => setNickname(e.target.value)}
+      />
+      <button className={nickname === '' ? 'btn btn-inactive' : 'btn'} onClick={submit}>Continue</button>
     </div>
   )
 }

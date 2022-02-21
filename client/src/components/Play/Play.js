@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import '../styles/Play.scss'
-import { BoardSquare } from './subcomponents/BoardSquare'
-import { Modal } from './subcomponents/Modal'
+import '../../styles/Play.scss'
+import { BoardSquare } from './BoardSquare'
+import { Modal } from './Modal'
 
 export const Play = ({socket}) => {
   const [whoStarted, setWhoStarted] = useState('X')
@@ -13,6 +13,7 @@ export const Play = ({socket}) => {
   const [modal, setModal] = useState(false)
   const [result, setResult] = useState('')
   const [score, setScore] = useState([0, 0])
+  const [playerLeft, setPlayerLeft] = useState(false)
 
   const [otherPlayerReady, setOtherPlayerReady] = useState(false)
 
@@ -60,14 +61,25 @@ export const Play = ({socket}) => {
         ? setScore(prevScore => [prevScore[0], prevScore[1] + 1])
         : setScore(prevScore => [prevScore[0] + 1, prevScore[1]])
     })
+
+    socket.on('tie', () => {
+      setModal(true)
+      setResult('tie')
+    })
+
   }, [socket, symbol])
 
   useEffect(() => {
     socket.on('board_changed', (board) => setBoard(board))
     socket.on('your_turn', () => setMyTurn(true))
-
+    socket.on('player_left', () => {
+      setPlayerLeft(true)
+      setModal(true)
+    })
+      
     socket.on('other_player_ready', () => {
       if(status === 'Waiting for opponent') {
+        setMyTurn('')
         symbol === whoStarted
           ? setMyTurn(false)
           : setMyTurn(true)
@@ -84,6 +96,7 @@ export const Play = ({socket}) => {
       rematch={rematch} 
       result={result} 
       setOtherPlayerReady={setOtherPlayerReady}
+      playerLeft={playerLeft}
     />}
     <div className="play">
       <header className="play__scoreboard">

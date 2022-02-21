@@ -4,11 +4,10 @@ import io from 'socket.io-client'
 import { Menu } from './components/Menu';
 import { CreateMatch } from './components/CreateMatch';
 import { WaitingRoom } from './components/WaitingRoom';
-import { Play } from './components/Play';
+import { Play } from './components/Play/Play';
 import { JoinMatch } from './components/JoinMatch';
 
 import './App.scss';
-import './temporary-styling.scss'
 
 function App() {
   const URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001/'

@@ -1,5 +1,5 @@
 .play {
-  padding: 1em;
+  padding: max(1em, 2%);
   height: 100vh;
   background: linear-gradient(#EE0979, #FF6A00);
   display: flex;
@@ -8,16 +8,13 @@
   text-align: center;
   align-items: center;
 
-  &__board {
-    filter: var(--drop-shadow);
-  }
-
   &__status {
     filter: var(--drop-shadow);
   }
 
   &__scoreboard {
     width: 100%;
+    max-width: 600px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -38,12 +35,15 @@
 
   &__board {
     width: 100%;
+    max-width: 600px;
     aspect-ratio: 1 / 1;
     background-color: #2D2D2D;
-    // border-radius: 50px;
+    border-radius: 50px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+    filter: var(--drop-shadow);
+    overflow: hidden;
 
     &__square {
       outline: 1px solid #1B1B1B;

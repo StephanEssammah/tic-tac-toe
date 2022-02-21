@@ -2,7 +2,7 @@ import express from "express"
 import { Server } from "socket.io"
 import http from "http"
 import path from "path"
-import { players, checkForWin } from './utils.js'
+import { players, checkForWin, checkForFullBoard } from './utils.js'
 
 const port = process.env.PORT || 3001;
 const app = express()
@@ -16,8 +16,11 @@ const io = new Server(server, {
 })
 
 io.on("connection", (socket) => {
+  let socketRoom;
+
   socket.on("create_room", () => {
     const roomNumber = Math.floor(1000 + Math.random() * 9000);
+    socketRoom = roomNumber;
     socket.join(roomNumber)
     socket.emit('room_created', roomNumber)
   })
@@ -25,6 +28,7 @@ io.on("connection", (socket) => {
   socket.on("join_room", (room, name) => {
     if (players(io, room) === 2) return socket.emit('room_full')
     if (players(io, room) === 'not found') return socket.emit('room_not_found')
+    socketRoom = room;
     socket.join(room)
     socket.to(room).emit('opponent_joined', name)
   })
@@ -42,6 +46,11 @@ io.on("connection", (socket) => {
       socket.to(room).emit('loss')
       return;
     }
+    const fullBoard = checkForFullBoard(array)
+    if(fullBoard) {
+      io.emit('tie')
+      return;
+    }
     socket.to(room).emit('your_turn')
   })
 
@@ -49,6 +58,9 @@ io.on("connection", (socket) => {
     socket.to(room).emit('other_player_ready')
   })
 
+  socket.on('disconnecting', () => {
+    socket.to(socketRoom).emit('player_left')
+  })
 })
 
 
