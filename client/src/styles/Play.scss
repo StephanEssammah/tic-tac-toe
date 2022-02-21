@@ -8,6 +8,14 @@
   text-align: center;
   align-items: center;
 
+  &__board {
+    filter: var(--drop-shadow);
+  }
+
+  &__status {
+    filter: var(--drop-shadow);
+  }
+
   &__scoreboard {
     width: 100%;
     display: flex;

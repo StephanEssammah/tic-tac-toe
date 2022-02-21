@@ -2,7 +2,7 @@ import express from "express"
 import { Server } from "socket.io"
 import http from "http"
 import path from "path"
-import { players } from './utils.js'
+import { players, checkForWin } from './utils.js'
 
 const port = process.env.PORT || 3001;
 const app = express()
@@ -34,9 +34,19 @@ io.on("connection", (socket) => {
     io.to(room).emit('start_match')
   })
 
-  socket.on('board_change', (room, array) => {
+  socket.on('board_change', (room, array, symbol) => {
     io.to(room).emit('board_changed', array)
+    const win = checkForWin(array, symbol)
+    if (win) {
+      socket.emit('win')
+      socket.to(room).emit('loss')
+      return;
+    }
     socket.to(room).emit('your_turn')
+  })
+
+  socket.on('player_ready', (room) => {
+    socket.to(room).emit('other_player_ready')
   })
 
 })

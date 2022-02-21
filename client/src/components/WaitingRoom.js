@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import '../styles/WaitingRoom.scss'
 
 export const WaitingRoom = ({socket}) => {
   const [roomNumber, setRoomNumber] = useState('')
@@ -22,10 +23,10 @@ export const WaitingRoom = ({socket}) => {
   },[socket, navigate, nickname, roomNumber, opponent])
 
   return (
-    <div className="container white-text" >
-      <h3 >Room Number:</h3>
-      <h1>{roomNumber}</h1>
-      <p>Waiting for opponent...</p>
+    <div className="waiting-room container white-text" >
+      <h3 className="waiting-room__top">Room Number:</h3>
+      <h1 className="waiting-room__number">{roomNumber}</h1>
+      <p className="waiting-room__status">Waiting for opponent...</p>
     </div>
   )
 }

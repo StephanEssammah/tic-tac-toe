@@ -7,6 +7,7 @@ export const Menu = () => {
   const navigate = useNavigate()
 
   return (
+    
     <div className="container">
       <h1 className="menu__logo">O X</h1>
       <h3 className="menu__logo-subheading">TIC TAC TOE</h3>

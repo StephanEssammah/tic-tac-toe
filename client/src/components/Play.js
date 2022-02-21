@@ -2,12 +2,35 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import '../styles/Play.scss'
 import { BoardSquare } from './subcomponents/BoardSquare'
+import { Modal } from './subcomponents/Modal'
 
 export const Play = ({socket}) => {
+  const [whoStarted, setWhoStarted] = useState('X')
   const [myTurn, setMyTurn] = useState(false)
   const [status, setStatus] = useState('Opponents turn')
   const {playerOne, playerTwo, symbol, room} = useLocation().state
-  const [board, setBoard] = useState(['', 'X', '', '', '', 'O', '', '', ''])
+  const [board, setBoard] = useState(['', '', '', '', '', '', '', '', ''])
+  const [modal, setModal] = useState(false)
+  const [result, setResult] = useState('')
+  const [score, setScore] = useState([0, 0])
+
+  const [otherPlayerReady, setOtherPlayerReady] = useState(false)
+
+  const rematch = () => {
+    setMyTurn(false)
+    setBoard(['', '', '', '', '', '', '', '', ''])
+    setModal(false)
+    if(otherPlayerReady) {
+      socket.emit('player_ready', room)
+      symbol === whoStarted
+          ? setMyTurn(false)
+          : setMyTurn(true)
+      whoStarted === 'X' ? setWhoStarted('O') : setWhoStarted('X')
+      return;
+    }
+    setStatus('Waiting for opponent')
+    socket.emit('player_ready', room)
+  }
 
   useEffect(() => {
     if(symbol === 'X') {
@@ -22,15 +45,46 @@ export const Play = ({socket}) => {
   }, [myTurn])
 
   useEffect(() => {
-    socket.on('board_changed', (board) => {
-      setBoard(board)
+    socket.on('win', () => {
+      setModal(true)
+      setResult('win')
+      symbol === 'X' 
+        ? setScore(prevScore => [prevScore[0] + 1, prevScore[1]])
+        : setScore(prevScore => [prevScore[0], prevScore[1] + 1])
     })
-    socket.on('your_turn', () => {
-      setMyTurn(true)
-    })
-  }, [socket])
 
-  return (
+    socket.on('loss', () => {
+      setModal(true)
+      setResult('loss')
+      symbol === 'X' 
+        ? setScore(prevScore => [prevScore[0], prevScore[1] + 1])
+        : setScore(prevScore => [prevScore[0] + 1, prevScore[1]])
+    })
+  }, [socket, symbol])
+
+  useEffect(() => {
+    socket.on('board_changed', (board) => setBoard(board))
+    socket.on('your_turn', () => setMyTurn(true))
+
+    socket.on('other_player_ready', () => {
+      if(status === 'Waiting for opponent') {
+        symbol === whoStarted
+          ? setMyTurn(false)
+          : setMyTurn(true)
+        whoStarted === 'X' ? setWhoStarted('O') : setWhoStarted('X')
+        return;
+      }
+      setOtherPlayerReady(true)
+    })
+  }, [socket, status, symbol, whoStarted])
+
+  return <>
+    {modal && 
+    <Modal 
+      rematch={rematch} 
+      result={result} 
+      setOtherPlayerReady={setOtherPlayerReady}
+    />}
     <div className="play">
       <header className="play__scoreboard">
         <div>
@@ -38,14 +92,14 @@ export const Play = ({socket}) => {
           <p className="play__scoreboard__symbol">X</p>
         </div>
         <div>
-          <p className="play__scoreboard__score">5 : 2</p>
+          <p className="play__scoreboard__score">{score[0]} : {score[1]}</p>
         </div>
         <div>
           <p>{playerTwo}</p>
           <p className="play__scoreboard__symbol">O</p>
         </div>
       </header>
-      <h1 className="white-text">{status}</h1>
+      <h1 className="white-text play__status">{status}</h1>
       <div className="play__board">
         {board.map((square, index) => (
           <BoardSquare 
@@ -63,5 +117,5 @@ export const Play = ({socket}) => {
       </div>
       <div />
     </div>
-  )
+  </>
 }

@@ -8,7 +8,7 @@ export const BoardSquare = ({room, socket, board, square, index, myTurn, setMyTu
     setSquareClass('play__board__square')
     const newBoard = Array.from(board)
     newBoard[index] = symbol
-    socket.emit('board_change', room, newBoard)
+    socket.emit('board_change', room, newBoard, symbol)
     setMyTurn(false)
   }
 
