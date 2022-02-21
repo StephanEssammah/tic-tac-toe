@@ -25,8 +25,10 @@ export const checkForWin = (array, symbol) => {
   let win = false
 
   winningConditions.forEach(condition => {
-    if (JSON.stringify(condition) === JSON.stringify(positions)) win = true;
+    if(condition.every(number => positions.includes(number))) win = true
   })
-
+  
   return win;
 }
+
+export const checkForFullBoard = (array) => !array.includes('')
