@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import '../styles/Play.scss'
-import { BoardSquare } from './subcomponents/BoardSquare'
-import { Modal } from './subcomponents/Modal'
+import '../../styles/Play.scss'
+import { BoardSquare } from './BoardSquare'
+import { Modal } from './Modal'
 
 export const Play = ({socket}) => {
   const [whoStarted, setWhoStarted] = useState('X')
@@ -68,6 +68,7 @@ export const Play = ({socket}) => {
 
     socket.on('other_player_ready', () => {
       if(status === 'Waiting for opponent') {
+        setMyTurn('')
         symbol === whoStarted
           ? setMyTurn(false)
           : setMyTurn(true)
