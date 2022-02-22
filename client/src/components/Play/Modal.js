@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../../styles/Modal.scss'
 
-export const Modal = ({result, rematch, setOtherPlayerReady, playerLeft}) => {
+export const Modal = ({result, rematch, setOtherPlayerReady, playerLeft, socket}) => {
   const [paragraph, setParagraph] = useState('')
   const [heading, setHeading] = useState('')
   const navigate = useNavigate()
@@ -28,13 +28,18 @@ export const Modal = ({result, rematch, setOtherPlayerReady, playerLeft}) => {
     }
   }, [result, setOtherPlayerReady, playerLeft])
 
+  const backToMenu = () => {
+    socket.emit('back_to_menu')
+    navigate('/')
+  }
+
   return (
     <div className="modal">
       <div className="modal__container">
         <p className="modal__paragraph">{paragraph}</p>
         <h1 className="modal__game-status">{heading}</h1>
         {!playerLeft && <button className="btn" onClick={rematch}>Play Again</button>}
-        <button className="btn" onClick={() => navigate('/')}>Back to Menu</button>
+        <button className="btn" onClick={backToMenu}>Back to Menu</button>
       </div>
     </div>
   )

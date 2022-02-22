@@ -14,7 +14,6 @@ export const Play = ({socket}) => {
   const [result, setResult] = useState('')
   const [score, setScore] = useState([0, 0])
   const [playerLeft, setPlayerLeft] = useState(false)
-
   const [otherPlayerReady, setOtherPlayerReady] = useState(false)
 
   const rematch = () => {
@@ -97,6 +96,7 @@ export const Play = ({socket}) => {
       result={result} 
       setOtherPlayerReady={setOtherPlayerReady}
       playerLeft={playerLeft}
+      socket={socket}
     />}
     <div className="play">
       <header className="play__scoreboard">
