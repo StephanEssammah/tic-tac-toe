@@ -58,6 +58,10 @@ io.on("connection", (socket) => {
     socket.to(room).emit('other_player_ready')
   })
 
+  socket.on('back_to_menu', () => {
+    socket.to(socketRoom).emit('player_left')
+  })
+
   socket.on('disconnecting', () => {
     socket.to(socketRoom).emit('player_left')
   })

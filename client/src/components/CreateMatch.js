@@ -12,8 +12,6 @@ export const CreateMatch = ({socket}) => {
     navigate('/waiting-room', { state: nickname})
   }
 
-
-
   return (
     <div className="container">
       <input 
