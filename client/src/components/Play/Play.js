@@ -8,13 +8,14 @@ export const Play = ({socket}) => {
   const [whoStarted, setWhoStarted] = useState('X')
   const [myTurn, setMyTurn] = useState(false)
   const [status, setStatus] = useState('Opponents turn')
-  const {playerOne, playerTwo, symbol, room} = useLocation().state
   const [board, setBoard] = useState(['', '', '', '', '', '', '', '', ''])
   const [modal, setModal] = useState(false)
   const [result, setResult] = useState('')
   const [score, setScore] = useState([0, 0])
   const [playerLeft, setPlayerLeft] = useState(false)
   const [otherPlayerReady, setOtherPlayerReady] = useState(false)
+
+  const {playerOne, playerTwo, symbol, room} = useLocation().state
 
   const rematch = () => {
     setMyTurn(false)
@@ -36,7 +37,6 @@ export const Play = ({socket}) => {
     if(symbol === 'X') {
       setMyTurn(true)
       setStatus('Your Turn!')
-      return;
     }
   }, [symbol])
 
@@ -65,7 +65,6 @@ export const Play = ({socket}) => {
       setModal(true)
       setResult('tie')
     })
-
   }, [socket, symbol])
 
   useEffect(() => {
