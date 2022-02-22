@@ -7,7 +7,7 @@ import { WaitingRoom } from './components/WaitingRoom';
 import { Play } from './components/Play/Play';
 import { JoinMatch } from './components/JoinMatch';
 
-import './App.scss';
+import './styles/App.scss';
 
 function App() {
   const URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001/'

@@ -3,29 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import '../../styles/Modal.scss'
 
 export const Modal = ({result, rematch, setOtherPlayerReady, playerLeft, socket}) => {
-  const [paragraph, setParagraph] = useState('')
-  const [heading, setHeading] = useState('')
+  const [info, setInfo] = useState({paragraph: '', heading: ''})
   const navigate = useNavigate()
 
   useEffect(() => {
     setOtherPlayerReady(false)
-    if (playerLeft) {
-      setParagraph('')
-      setHeading('Opponent Left.')
-      return;
-    }
-    if (result === 'win') {
-      setParagraph('Congratulations,')
-      setHeading('You Won!')
-    }
-    if (result === 'loss') {
-      setParagraph('Sorry,')
-      setHeading('You Lost...')
-    }
-    if (result === 'tie') {
-      setParagraph('')
-      setHeading('Tie!')
-    }
+    if(playerLeft) return setInfo({paragraph: '', heading: 'Opponent Left.'})
+    if(result === 'win') setInfo({paragraph: 'Congratulations,', heading: 'You Won!'})
+    if(result === 'loss') setInfo({paragraph: 'Sorry,', heading: 'You Lost...'})
+    if(result === 'tie') setInfo({paragraph: '', heading: 'Tie!'})
   }, [result, setOtherPlayerReady, playerLeft])
 
   const backToMenu = () => {
@@ -36,8 +22,8 @@ export const Modal = ({result, rematch, setOtherPlayerReady, playerLeft, socket}
   return (
     <div className="modal">
       <div className="modal__container">
-        <p className="modal__paragraph">{paragraph}</p>
-        <h1 className="modal__game-status">{heading}</h1>
+        <p className="modal__paragraph">{info.paragraph}</p>
+        <h1 className="modal__game-status">{info.heading}</h1>
         {!playerLeft && <button className="btn" onClick={rematch}>Play Again</button>}
         <button className="btn" onClick={backToMenu}>Back to Menu</button>
       </div>
